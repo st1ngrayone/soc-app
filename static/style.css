@@ -1,8 +1,9 @@
-.header{
+            .header{
                 padding: 5px 120px;
                 width: 150px;
                 height: 70px;
-                background-color: #236B8E; 
+                background-color: #236B8E;
+                border-radius: 5px;
             }
           
             .border{
@@ -29,6 +30,14 @@
                 text-color: #FFFFFF;
                 border-radius: 10px;
             }
+
+            .textbox1{
+                margin: 10px;
+                padding: 10px 40px;
+                background-color: #236B8E;
+                text-color: #FFFFFF;
+                border-radius: 10px;
+            }
                   
             ::placeholder {
                 color: #FFFFFF;
@@ -47,4 +56,11 @@
                 color: #236B8E;
                 font-style: oblique;
                 font-weight: bold;
+            }
+
+            .table {
+                  table-layout: fixed;
+                  width: 100%;
+                  border-collapse: collapse;
+                  border: 3px solid purple;
             }

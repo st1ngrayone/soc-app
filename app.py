@@ -68,5 +68,14 @@ def register():
         msg = 'Please fill out the form !'
     return render_template('register.html', msg = msg)
 
+@app.route('/users')
+def users():
+    if 'username' in session:
+        username = session['username']
+        return render_template('users.html', username=username)
+    else:
+        return redirect(url_for('login'))
+
+
 if __name__ == '__main__':
     app.run()

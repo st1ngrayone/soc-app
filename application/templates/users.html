@@ -1,0 +1,33 @@
+{% extends 'base_nav.html' %}
+
+{% block page_name %}Пользователи | {% endblock %}
+
+{% block container %}
+
+    <h1 class="display-4">Пользователи соц сети</h1>
+
+    <div class="table-responsive">
+        <table class="table">
+          <tr>
+              <td>Имя</td>
+              <td>Фамилия</td>
+              <td>Город</td>
+          </tr>
+          <tr>
+              <td>{{ current_user.username }}</td>
+
+              {% if current_user.lastname %}
+                <td>{{ current_user.lastname }} </td>
+              {% else %}
+                <td>Не задано</td>
+              {% endif %}
+
+              {% if current_user.city %}
+                <td>{{ current_user.city }} </td>
+              {% else %}
+                <td>Не задано</td>
+              {% endif %}
+          </tr>
+        </table>
+    </div>
+{% endblock %}

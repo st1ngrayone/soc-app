@@ -1,0 +1,32 @@
+{% extends 'base.html' %}
+
+{% block page_name %}Авторизация | {% endblock %}
+
+{% block container %}
+    <div align="center">
+      <div align="center" class="border">
+         <div class="header">
+            <h1 class="word">Login</h1>
+         </div>
+
+          <div class="msg">{{ msg }}</div>
+
+        <h2 class="word">
+            <form action="{{ url_for('login') }}" method="post">
+                <div class="mt-5 form-label-group mb-4">
+                    <p class="text-muted">Username</p>
+                    <input id="username" name="username" type="text" class="textbox"/>
+                </div>
+                <div class="form-label-group mb-3">
+                    <p class="text-muted">Password</p>
+                    <input id="password" name="password" type="password" class="textbox"/>
+                </div>
+                <div class="checkbox mb-3">
+                    <input type="submit" class="btn btn-info" value="Sign In">
+                </div>
+            </form>
+        </h2>
+        <p class="bottom">Don't have an account?  <a class="bottom" href="{{url_for('register')}}"> Sign Up here</a></p>
+      </div>
+    </div>
+{% endblock %}

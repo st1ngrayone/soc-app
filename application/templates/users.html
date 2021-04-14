@@ -7,27 +7,23 @@
     <h1 class="display-4">Пользователи соц сети</h1>
 
     <div class="table-responsive">
-        <table class="table">
-          <tr>
-              <td>Имя</td>
-              <td>Фамилия</td>
-              <td>Город</td>
-          </tr>
-          <tr>
-              <td>{{ current_user.username }}</td>
-
-              {% if current_user.lastname %}
-                <td>{{ current_user.lastname }} </td>
-              {% else %}
-                <td>Не задано</td>
-              {% endif %}
-
-              {% if current_user.city %}
-                <td>{{ current_user.city }} </td>
-              {% else %}
-                <td>Не задано</td>
-              {% endif %}
-          </tr>
-        </table>
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>Имя</th>
+                        <th>Фамилия</th>
+                        <th>Город</th>
+                    <tr>
+                </thead>
+                <tbody>
+                    {% for user in users %}
+                    <tr>
+                        <td>{{ users.name }}</td>
+                        <td>{{ users.age }}</td>
+                        <td>{{ users.city }}</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
     </div>
 {% endblock %}

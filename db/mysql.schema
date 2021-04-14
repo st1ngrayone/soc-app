@@ -1,0 +1,26 @@
+create table `accounts` (
+	`id` int(11) not null auto_increment,
+	`username` varchar(50) not null,
+    `password` varchar(255) not null,
+    `email` varchar(100) not null,
+    primary key (`id`)
+    ) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8;
+
+
+CREATE TABLE `updates` (
+`update_id` INT(11) AUTO_INCREMENT ,
+`update` VARCHAR(45),
+`friend_id_fk` int(11),
+`created` INT(11) ,
+`ip` VARCHAR(45),
+PRIMARY KEY (`update_id`),
+FOREIGN KEY (`friend_id_fk`) REFERENCES accounts(`id`)) ENGINE InnoDB AUTO_INCREMENT=4;
+
+
+CREATE TABLE `friends` (
+    `friend_one` INT(11) ,
+    `friend_two` INT(11) ,
+    `status` ENUM('0','1','2') DEFAULT '0',
+PRIMARY KEY (`friend_one`,`friend_two`),
+FOREIGN KEY (friend_one) REFERENCES accounts(`id`),
+FOREIGN KEY (friend_two) REFERENCES accounts(`id`));

@@ -12,15 +12,13 @@
                     <tr>
                         <th>Имя</th>
                         <th>Фамилия</th>
-                        <th>Город</th>
                     <tr>
                 </thead>
                 <tbody>
-                    {% for user in users %}
+                    {% for user in friends %}
                     <tr>
                         <td>{{ user.name }}</td>
                         <td>{{ user.lastname }}</td>
-                        <td>{{ user.city }}</td>
                     </tr>
                     {% endfor %}
                 </tbody>

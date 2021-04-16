@@ -1,22 +1,18 @@
-from flask import render_template, request, redirect, url_for, session
-
-import MySQLdb.cursors
 import re
-
+from flask import render_template, request, redirect, url_for
 from flask_login import logout_user, login_user, current_user
 
 from application import app
-from application.extensions import mysql, login_manager
+from application.dao import get_user, add_new_user
+from application.extensions import login_manager
 from application.user import User
 
 
 @login_manager.user_loader
-def load_user(user_id):
-    cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
-    cursor.execute('SELECT * FROM accounts WHERE username = % s ', (user_id,))
-    account = cursor.fetchone()
+def load_user(username):
+    account = get_user(username)
     if account:
-        return User(account['username'], account['password'])
+        return User(account['id'], account['username'], account['password'])
     return None
 
 
@@ -53,15 +49,16 @@ def logout():
 @app.route('/register', methods=['GET', 'POST'])
 def register():
     msg = ''
+
     if request.method == 'POST' and 'username' in request.form and 'password' in request.form and 'email' in request.form:
         username = request.form['username']
         password = request.form['password']
         email = request.form['email']
         name = request.form['name']
         lastname = request.form['lastname']
-        cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
-        cursor.execute('SELECT * FROM accounts WHERE username = % s', (username,))
-        account = cursor.fetchone()
+
+        account = get_user(username)
+
         if account:
             msg = 'Account already exists !'
         elif not re.match(r'[^@]+@[^@]+\.[^@]+', email):
@@ -71,8 +68,7 @@ def register():
         elif not username or not password or not email:
             msg = 'Please fill out the form !'
         else:
-            cursor.execute('INSERT INTO accounts VALUES (NULL, % s, % s, % s, % s, % s, NULL, NULL, NULL)', (username, password, email, name, lastname))
-            mysql.connection.commit()
+            add_new_user(username, password, email, name, lastname)
             return redirect(url_for('login'))
     elif request.method == 'POST':
         msg = 'Please fill out the form!'

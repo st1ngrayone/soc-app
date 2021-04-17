@@ -1,15 +1,42 @@
-from flask import render_template
+from flask import render_template, url_for, flash
 from flask_login import login_required, current_user
+from werkzeug.utils import redirect
 
-from application.dao import get_users, get_friends
 from application import app
+from application.dao import get_accounts, get_friends, get_account, update_account
+from application.forms import ProfileForm
+
+
+@app.route('/profile/')
+@login_required
+def profile():
+    account = get_account(current_user.username)
+    form = ProfileForm(data=account)
+    return render_template("profile.html", form=form)
+
+
+@app.route('/profile', methods=['POST'])
+@login_required
+def post_profile():
+    form = ProfileForm()
+    if form.validate_on_submit():
+        password = form.password.data
+
+        if current_user.password == password:
+            updated_profile = form.populate_profile()
+            update_account(updated_profile, current_user.user_id)
+            flash('Изменения сохранены!', 'success')
+            return redirect(url_for('profile'))
+        else:
+            flash('Неверный пароль!', 'warning')
+    return render_template('profile.html', form=form)
 
 
 @app.route('/users')
 @login_required
 def users():
-    users_data = get_users()
-    return render_template('users.html', users=users_data)
+    accounts = get_accounts()
+    return render_template('users.html', users=accounts)
 
 
 @app.route('/friends')

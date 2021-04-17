@@ -5,6 +5,9 @@ create table `accounts` (
     `email` varchar(100) not null,
     `name` varchar(100) not null,
     `lastname` varchar(100) not null,
+    `city` varchar(250) not null,
+    `birth_date` date null,
+    `gender` ENUM('m','f','u') DEFAULT 'u',
     primary key (`id`)
     ) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8;
 

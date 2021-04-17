@@ -1,14 +1,16 @@
-{% extends 'base.html' %}
+{% extends 'base_nav.html' %}
 
-{% block page_name %}Регистрация | {% endblock %}
+{% block page_name %}Профиль | {% endblock %}
 
 {% block container %}
 <main class="container">
-    {% include 'alert.html' %}
+    <p>
+        {% include 'alert.html' %}
+    </p>
 
     <div class="row">
     <div class="col-8 col-lg-4 offset-2 offset-lg-4">
-      <form class="form-signin mt-0" action="{{ url_for('post_register', next=request.args.get('next')) }}" method="post">
+      <form class="form-signin mt-0" action="{{ url_for('post_profile') }}" method="post">
           {{ form.csrf_token }}
 
           <div class="text-center mt-5">
@@ -16,15 +18,12 @@
           </div>
 
           <div class="text-center mt-5">
-            <p class="h5 font-weight-light">Регистрация</p>
+            <p class="h5 font-weight-light">Профиль</p>
           </div>
 
           <div class="mt-5 form-label-group">
             <p class="text-muted"> Логин</p>
-            {{ form.username(type='text', class='form-control') }}
-              {% for error in form.username.errors %}
-                <span style="color: red;">{{ error }}</span>
-              {% endfor %}
+            <input type="text" readonly value="{{ current_user.username }}">
           </div>
 
           <div class="mt-5 form-label-group">
@@ -39,7 +38,7 @@
 
           <div class="mt-5 form-label-group">
             <p class="text-muted"> Дата рождения</p>
-            {{ form.birth_date(type='date', class='form-control') }}
+            {{ form.birth_date(type='date', class='form-control', placeholder='') }}
           </div>
 
           <div class="mt-5 form-label-group">
@@ -52,7 +51,7 @@
             {{ form.city(type='text', class='form-control') }}
           </div>
 
-          <div class="mt-4 form-label-group">
+          <div class="mt-5 form-label-group">
             <p class="text-muted"> Email</p>
             {{ form.email(type='email', class='form-control', autofocus="") }}
             {% for error in form.email.errors %}
@@ -61,20 +60,12 @@
           </div>
 
           <div class="mt-4 form-label-group">
-            <p class="text-muted"> Пароль</p>
+            <p class="text-muted"> Текущий пароль</p>
             {{ form.password(type='password', class='form-control') }}
           </div>
 
-          <div class="mt-4 form-label-group">
-            <p class="text-muted"> Повторите пароль</p>
-            {{ form.password_2(type='password', class='form-control') }}
-            {% for error in form.password_2.errors %}
-              <span style="color: red;">{{ error }}</span>
-            {% endfor %}
-          </div>
-
-          <div class="mt-4 checkbox">
-             {{ form.submit(value='Зарегистрироваться', class='btn btn-lg btn-danger btn-block') }}
+          <div class="mt-5 checkbox">
+             {{ form.submit(value='Обновить', class='btn btn-lg btn-danger btn-block') }}
           </div>
           <br/><br/>
       </form>

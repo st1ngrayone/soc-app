@@ -2,15 +2,15 @@ from flask import render_template, request, redirect, url_for, flash
 from flask_login import logout_user, login_user, current_user
 
 from application import app
-from application.dao import get_user, add_new_user
+from application.entity.user import User
 from application.extensions import login_manager
 from application.forms import LoginForm, RegisterForm
-from application.user import User
+from application.dao import get_account, add_new_account
 
 
 @login_manager.user_loader
 def load_user(username):
-    account = get_user(username)
+    account = get_account(username)
     if account:
         return User(account['id'], account['username'], account['password'])
     return None
@@ -58,17 +58,15 @@ def register():
 def post_register():
     form = RegisterForm()
     if form.validate_on_submit():
-        username = request.form['username']
-        password = request.form['password']
-        email = request.form['email']
-        name = request.form['name']
-        lastname = request.form['lastname']
+        username = form.username.data
+        password = form.password.data
 
-        account = get_user(username)
+        account = get_account(username)
 
         if account:
             flash('Такой пользователь уже существует!', 'warning')
         else:
-            add_new_user(username, password, email, name, lastname)
+            profile = form.populate_profile()
+            add_new_account(username, password, profile)
             return redirect(url_for('login'))
     return render_template('register.html', form=form)

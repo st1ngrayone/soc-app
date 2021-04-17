@@ -25,9 +25,14 @@ def get_users():
 def get_friends(user_id):
     cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
 
-    query = 'SELECT U.username, U.email FROM accounts U, friends F ' \
-            'WHERE U.id = % s AND CASE WHEN F.friend_one = 4 ' \
-            'THEN F.friend_two = U.id WHEN F.friend_two = 5 THEN F.friend_one= U.id END'
+    query = 'select ac.name, ac.lastname from accounts a ' \
+            'inner join friends f on a.id = f.friend_one ' \
+            'inner join accounts ac on ac.id = f.friend_two ' \
+            'where f.friend_one = % s'
+
+    #query = 'SELECT U.username, U.email FROM accounts U, friends F ' \
+    #        'WHERE U.id = % s AND CASE WHEN F.friend_one = 4 ' \
+    #        'THEN F.friend_two = U.id WHEN F.friend_two = 5 THEN F.friend_one= U.id END'
 
     cursor.execute(query, (user_id,))
     return cursor.fetchall()

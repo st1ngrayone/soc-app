@@ -3,40 +3,67 @@
 {% block page_name %}Регистрация | {% endblock %}
 
 {% block container %}
-    <div align="center">
-      <div align="center" class="border">
-         <div class="header">
-            <h1 class="word">Регистрация</h1>
-         </div>
-        <h5 class="word">
-            <form action="{{ url_for('register') }}" method="post">
-              <div class="msg">{{ msg }}</div>
-                <div class="mt-5 form-label-group mb-4">
-                    <p class="text-muted"> Username</p>
-                    <input id="username" name="username" type="text" class="textbox"/>
-                </div>
-                <div class="mt-5 form-label-group mb-4">
-                    <p class="text-muted"> Password</p>
-                    <input id="password" name="password" type="password" class="textbox"/>
-                </div>
-                <div class="mt-5 form-label-group mb-4">
-                    <p class="text-muted"> Email</p>
-                    <input id="email" name="email" type="text" class="textbox"/>
-                </div>
-                <div class="mt-5 form-label-group mb-4">
-                    <p class="text-muted"> Имя</p>
-                    <input id="name" name="name" type="text" class="textbox"/>
-                </div>
-                <div class="mt-5 form-label-group mb-4">
-                    <p class="text-muted"> Фамилия</p>
-                    <input id="lastname" name="lastname" type="text" class="textbox"/>
-                </div>
-                <div class="checkbox mb-3">
-                    <input type="submit" class="btn btn-info" value="Sign Up">
-                </div>
-            </form>
-        </h5>
-        <p class="bottom">Already have an account?  <a class="bottom" href="{{url_for('login')}}"> Sign In here</a></p>
-      </div>
+<main class="container">
+    {% include 'alert.html' %}
+
+    <div class="row">
+    <div class="col-8 col-lg-4 offset-2 offset-lg-4">
+      <form class="form-signin mt-0" action="{{ url_for('post_register', next=request.args.get('next')) }}" method="post">
+          {{ form.csrf_token }}
+
+          <div class="text-center mt-5">
+            <h1 class="h3 mb-3 font-weight-normal">Soc app <i class="fa fa-link" aria-hidden="true"></i></h1>
+          </div>
+
+          <div class="text-center mt-5">
+            <p class="h5 font-weight-light">Регистрация</p>
+          </div>
+
+          <div class="mt-5 form-label-group">
+            <p class="text-muted"> Логин</p>
+            {{ form.username(type='text', class='form-control') }}
+              {% for error in form.username.errors %}
+                <span style="color: red;">{{ error }}</span>
+              {% endfor %}
+          </div>
+
+          <div class="mt-5 form-label-group">
+            <p class="text-muted"> Имя</p>
+            {{ form.name(type='text', class='form-control') }}
+          </div>
+
+          <div class="mt-5 form-label-group">
+            <p class="text-muted"> Фамилия</p>
+            {{ form.lastname(type='text', class='form-control') }}
+          </div>
+
+          <div class="mt-4 form-label-group">
+            <p class="text-muted"> Email</p>
+            {{ form.email(type='email', class='form-control', autofocus="") }}
+            {% for error in form.email.errors %}
+              <span style="color: red;">{{ error }}</span>
+            {% endfor %}
+          </div>
+
+          <div class="mt-4 form-label-group">
+            <p class="text-muted"> Пароль</p>
+            {{ form.password(type='password', class='form-control') }}
+          </div>
+
+          <div class="mt-4 form-label-group">
+            <p class="text-muted"> Повторите пароль</p>
+            {{ form.password_2(type='password', class='form-control') }}
+            {% for error in form.password_2.errors %}
+              <span style="color: red;">{{ error }}</span>
+            {% endfor %}
+          </div>
+
+          <div class="mt-4 checkbox">
+             {{ form.submit(value='Зарегистрироваться', class='btn btn-lg btn-danger btn-block') }}
+          </div>
+          <br/><br/>
+      </form>
     </div>
+  </div>
+</main>
 {% endblock %}

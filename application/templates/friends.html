@@ -4,7 +4,7 @@
 
 {% block container %}
 
-    <h1 class="display-4">Пользователи соц сети</h1>
+    <h1 class="display-4">МОИ ДРУЗЬЯ</h1>
 
     <div class="table-responsive">
             <table class="table">
@@ -15,7 +15,7 @@
                     <tr>
                 </thead>
                 <tbody>
-                    {% for user in friends %}
+                    {% for user in users %}
                     <tr>
                         <td>{{ user.name }}</td>
                         <td>{{ user.lastname }}</td>

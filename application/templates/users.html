@@ -3,27 +3,32 @@
 {% block page_name %}Пользователи | {% endblock %}
 
 {% block container %}
+<div class="row">
+  <div class="col-8 col-lg-4 offset-2 offset-lg-4">
+    <div class="text-center mt-3">
+      <h1 class="h3 mb-4 font-weight-normal">Пользователи</h1>
 
-    <h1 class="display-4">Пользователи соц сети</h1>
-
-    <div class="table-responsive">
-            <table class="table">
-                <thead>
-                    <tr>
-                        <th>Имя</th>
-                        <th>Фамилия</th>
-                        <th>Город</th>
-                    <tr>
-                </thead>
-                <tbody>
-                    {% for user in users %}
-                    <tr>
-                        <td>{{ user.name }}</td>
-                        <td>{{ user.lastname }}</td>
-                        <td>{{ user.city }}</td>
-                    </tr>
-                    {% endfor %}
-                </tbody>
-            </table>
+      <div class="table-responsive">
+        <table class="table">
+          <thead>
+            <tr>
+              <th>Имя</th>
+               <th>Фамилия</th>
+               <th>Город</th>
+            <tr>
+          </thead>
+            <tbody>
+              {% for user in users %}
+                <tr>
+                  <td>{{ user.name }}</td>
+                  <td>{{ user.lastname }}</td>
+                  <td>{{ user.city }}</td>
+                </tr>
+              {% endfor %}
+            </tbody>
+        </table>
+      </div>
     </div>
+  </div>
+</div>
 {% endblock %}

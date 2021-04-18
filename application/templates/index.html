@@ -3,24 +3,23 @@
 {% block page_name %}Главная | {% endblock %}
 
 {% block container %}
-        <div align="center">
-          <div align="center" class="border">
-             <div class="header">
-                <h1 class="word">Index</h1>
-             </div>
-                <p class="bottom">
-                    <br> Hi {{ current_user.username }}! Welcome to the index page...   </br>
-                </p>
-              <div align="center" class="textbox1">
-                  <a href="{{ url_for('users') }}" class="btn">Users</a>
-              </div>
-              <div align="center" class="textbox1">
-                  <a href="{{ url_for('friends') }}" class="btn">Друзья</a>
-              </div>
-              <div align="center" class="textbox1">
-                  <a href="{{ url_for('logout') }}" class="btn">Logout</a>
-              </div>
+<div class="row">
+  <div class="col-8 col-lg-4 offset-2 offset-lg-4">
+      <div class="text-center mt-3">
+        <h1 class="h3 mb-3 font-weight-normal">Soc app <i class="fa fa-link" aria-hidden="true"></i></h1>
+        <br>
 
-          </div>
-        </div>
+        <p class="bottom">
+          Привет {{ current_user.username }}! Добро пожаловать в Soc app!</br>
+        </p>
+
+        <p class="bottom">
+          Что у тебя нового?
+        </p>
+
+        </br>
+
+      </div>
+  </div>
+</div>
 {% endblock %}

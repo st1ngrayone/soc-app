@@ -14,23 +14,35 @@
     <div class="collapse navbar-collapse" id="navbarNav">
       <ul class="nav navbar-nav ml-auto">
 
-        <li class="nav-item">
+        <li class="nav-item {% if request.endpoint == 'index' %} active {% endif %}">
           <a href="{{ url_for('index') }}" class="nav-link text-decoration-none">
             <i class="fa fa-home"> Home</i>
           </a>
         </li>
 
-        <li class="nav-item">
-          <a href="{{ url_for('friends') }}" class="nav-link text-decoration-none">
-            <i class="fa fa-link" aria-hidden="true"> Friends</i>
+        <li class="nav-item {% if request.endpoint == 'users' %} active {% endif %}">
+          <a href="{{ url_for('users') }}" class="nav-link ml-3 custom-link">
+            <i class="fa fa-users">Users</i>
           </a>
         </li>
 
         {% if current_user.is_authenticated %}
+            <li class="nav-item {% if request.endpoint == 'friends' %} active {% endif %}">
+              <a href="{{ url_for('friends') }}" class="nav-link text-decoration-none">
+                <i class="fa fa-link" aria-hidden="true"> Friends</i>
+              </a>
+            </li>
+
+            <li class="nav-item {% if request.endpoint == 'profile' %} active {% endif %}">
+              <a href="{{ url_for('profile') }}" class="nav-link ml-3 custom-link">
+                <i class="fa fa-user">Profile</i>
+              </a>
+            </li>
+
             <li class="nav-item">
-                <a href="{{ url_for('logout') }}" class="nav-link ml-3 custom-link">
-                    <i class="fa fa-sign-out">Exit</i>
-                </a>
+              <a href="{{ url_for('logout') }}" class="nav-link ml-3 custom-link">
+                <i class="fa fa-sign-out">Exit</i>
+              </a>
             </li>
         {% endif %}
 

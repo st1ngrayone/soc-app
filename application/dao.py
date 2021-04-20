@@ -40,10 +40,35 @@ def update_account(profile, user_id):
     mysql.connection.commit()
 
 
-def get_accounts():
+def get_accounts(user_id):
     cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
-    cursor.execute('SELECT name, lastname, city FROM accounts WHERE name is not NULL')
+    cursor.execute(
+        'SELECT a.id, a.name, a.lastname, a.city, f.status FROM accounts a '
+        'left join friends f on a.id = f.friend_one'
+        'WHERE a.name is not NULL AND a.id != %s'
+        , (user_id,)
+    )
     return cursor.fetchall()
+
+
+def add_friend(user_id, other_user_id):
+    cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
+    cursor.execute(
+        'INSERT INTO friends (friend_one, friend_two) VALUES (%s, %s)', (
+            user_id, other_user_id
+        )
+    )
+    mysql.connection.commit()
+
+
+def confirm_friend(user_id, other_user_id):
+    cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
+    query = 'UPDATE friends ' \
+            'SET status="1" ' \
+            'WHERE (friend_one=%s OR friend_two=%s) AND' \
+            '(friend_one=%s OR friend_two=%s)'
+    cursor.execute(query, (user_id, user_id, other_user_id, other_user_id))
+    mysql.connection.commit()
 
 
 def get_friends(user_id):

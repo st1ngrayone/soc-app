@@ -9,12 +9,12 @@
       <h1 class="h3 mb-4 font-weight-normal">Пользователи</h1>
 
       <div class="table-responsive">
-        <table class="table">
+        <table class="table w-100 d-block d-md-table">
           <thead>
             <tr>
               <th>Имя</th>
-               <th>Фамилия</th>
-               <th>Город</th>
+              <th>Фамилия</th>
+              <th>Город</th>
             <tr>
           </thead>
             <tbody>
@@ -23,6 +23,12 @@
                   <td>{{ user.name }}</td>
                   <td>{{ user.lastname }}</td>
                   <td>{{ user.city }}</td>
+                  <td>
+                    <form action="{{ url_for('add_friend_request') }}" method="post">
+                      <input id="userId" name="userId" type="hidden" value="{{ user.id }}">
+                      <input class="btn btn-secondary btn-sm" type="submit" value="добавить" />
+                    </form>
+                </td>
                 </tr>
               {% endfor %}
             </tbody>

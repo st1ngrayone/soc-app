@@ -1,16 +1,18 @@
-create table `accounts` (
-	`id` int(11) not null auto_increment,
-	`username` varchar(50) not null,
-    `password` varchar(255) not null,
-    `email` varchar(100) not null,
-    `name` varchar(100) not null,
-    `lastname` varchar(100) not null,
-    `city` varchar(250) not null,
-    `birth_date` date null,
-    `gender` ENUM('m','f','u') DEFAULT 'u',
-    primary key (`id`)
-    ) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8;
-
+CREATE TABLE `accounts` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `username` varchar(50) CHARACTER SET utf8 NOT NULL,
+  `password` varchar(255) CHARACTER SET utf8 NOT NULL,
+  `email` varchar(100) CHARACTER SET utf8 NOT NULL,
+  `name` varchar(45) COLLATE utf8_unicode_ci DEFAULT NULL,
+  `lastname` varchar(45) COLLATE utf8_unicode_ci DEFAULT NULL,
+  `age` varchar(45) CHARACTER SET utf8 DEFAULT NULL,
+  `city` varchar(250) CHARACTER SET utf8 DEFAULT NULL,
+  `friendcount` int(11) DEFAULT NULL,
+  `birth_date` date DEFAULT NULL,
+  `gender` enum('m','f','u') COLLATE utf8_unicode_ci DEFAULT 'u',
+  PRIMARY KEY (`id`),
+  KEY `idx_accounts_id` (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 CREATE TABLE `updates` (
 `update_id` INT(11) AUTO_INCREMENT ,
@@ -20,7 +22,6 @@ CREATE TABLE `updates` (
 `ip` VARCHAR(45),
 PRIMARY KEY (`update_id`),
 FOREIGN KEY (`friend_id_fk`) REFERENCES accounts(`id`)) ENGINE InnoDB AUTO_INCREMENT=4;
-
 
 CREATE TABLE `friends` (
     `friend_one` INT(11) ,

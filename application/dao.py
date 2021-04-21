@@ -32,7 +32,7 @@ def update_account(profile, user_id):
 
     query = 'UPDATE accounts ' \
             'SET ' \
-            'email =  %s, name = %s, lastname = %s, city = %s, birth_date = %s, gender = %s' \
+            'email =  %s, name = %s, lastname = %s, city = %s, birth_date = %s, gender = %s ' \
             'WHERE id = % s'
 
     cursor.execute(query, (profile.email, profile.name, profile.lastname,
@@ -44,8 +44,8 @@ def get_accounts(user_id):
     cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
     cursor.execute(
         'SELECT a.id, a.name, a.lastname, a.city, f.status FROM accounts a '
-        'left join friends f on a.id = f.friend_one'
-        'WHERE a.name is not NULL AND a.id != %s'
+        'left join friends f on a.id != f.friend_one '
+        'WHERE a.name is not NULL AND a.id != %s  limit 30'
         , (user_id,)
     )
     return cursor.fetchall()
@@ -77,7 +77,7 @@ def get_friends(user_id):
     query = 'select ac.name, ac.lastname from accounts a ' \
             'inner join friends f on a.id = f.friend_one ' \
             'inner join accounts ac on ac.id = f.friend_two ' \
-            'where f.friend_one = % s'
+            'where f.friend_one = % s limit 30'
 
     # query = 'SELECT U.username, U.email FROM accounts U, friends F ' \
     #        'WHERE U.id = % s AND CASE WHEN F.friend_one = 4 ' \

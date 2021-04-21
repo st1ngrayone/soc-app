@@ -12,7 +12,7 @@ def get_account(username):
 def add_new_account(username, password, profile):
     cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
     cursor.execute(
-        'INSERT INTO accounts VALUES (NULL, %s, %s, %s, %s, %s, %s, %s, %s)',
+        'INSERT INTO accounts VALUES (NULL, %s, %s, %s, %s, %s, NULL, %s, NULL, %s, %s)',
         (
             username,
             password,

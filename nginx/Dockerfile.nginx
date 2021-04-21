@@ -1,0 +1,4 @@
+FROM nginx
+
+RUN apt update -y && apt install iputils-ping -y
+COPY nginx.conf /etc/nginx/nginx.conf

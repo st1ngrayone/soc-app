@@ -1,16 +1,45 @@
-version: '3.1'
+version: '2'
 
 services:
-  mysql:
-    image: mysql
-    container_name: mysql
+#  mysql:
+#    image: mysql
+#    container_name: mysql
+#    environment:
+#      MYSQL_DATABASE: socapp
+#      MYSQL_USER: monty
+#      MYSQL_PASSWORD: debian1
+#     MYSQL_ROOT_PASSWORD: p@ssworb
+#   networks:
+#     - flask_net
+#  ports:
+#      - '3306:3306'
+#    expose:
+#      - '3306'
+  
+  soc-app:
+    image: soc-app
+    container_name: socapp
     environment:
-      MYSQL_DATABASE: socapp
-      MYSQL_USER: monty
-      MYSQL_PASSWORD: debian1
-      MYSQL_ROOT_PASSWORD: p@ssworb
+      FLASK_APP: wsgi
+    networks:
+      - flask_net
     ports:
-      - '3306:3306'
-    expose:
-      - '3306'
+      - '5000:5000'
 
+  nginx:
+    image: socnginx
+    container_name: socnginx
+    networks:
+      - flask_net
+    ports:
+      - '443:443'
+      - '80:80'
+    depends_on:
+      - 'soc-app'
+    expose:
+      - '443'
+      - '80'
+
+networks:
+  flask_net:
+  

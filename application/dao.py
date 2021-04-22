@@ -1,5 +1,6 @@
 import MySQLdb.cursors
 
+
 from application.extensions import mysql
 
 
@@ -12,7 +13,7 @@ def get_account(username):
 def add_new_account(username, password, profile):
     cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
     cursor.execute(
-        'INSERT INTO accounts VALUES (NULL, %s, %s, %s, %s, %s, %s, %s, %s)',
+        'INSERT INTO accounts VALUES (NULL, %s, %s, %s, %s, %s, NULL, %s, NULL, %s, %s)',
         (
             username,
             password,
@@ -43,10 +44,9 @@ def update_account(profile, user_id):
 def get_accounts(user_id):
     cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
     cursor.execute(
-        'SELECT a.id, a.name, a.lastname, a.city, f.status FROM accounts a '
-        'left join friends f on a.id != f.friend_one '
-        'WHERE a.name is not NULL AND a.id != %s  limit 30'
-        , (user_id,)
+        'SELECT a.id, a.name, a.lastname, a.city FROM accounts a '
+        'WHERE a.name is not NULL and a.id != %s and a.id not in (select distinct friend_two from friends where friend_one = %s) '
+        , (user_id, user_id)
     )
     return cursor.fetchall()
 

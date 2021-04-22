@@ -1,6 +1,7 @@
 from flask import render_template, request, redirect, url_for, flash
 from flask_login import logout_user, login_user, current_user
 
+import hashlib
 from application import app
 from application.entity.user import User
 from application.extensions import login_manager
@@ -30,8 +31,9 @@ def post_login():
     if form.validate_on_submit():
         username = request.form['username']
         password = request.form['password']
+        passhash = hashlib.md5(password.encode('utf8')).hexdigest()
         user = load_user(username)
-        if user and user.password == password:
+        if user and user.password == passhash:
             login_user(user)
             next = request.args.get('next')
             return redirect(next or url_for('index'))
@@ -60,6 +62,7 @@ def post_register():
     if form.validate_on_submit():
         username = form.username.data
         password = form.password.data
+        passhash = hashlib.md5(password.encode('utf8')).hexdigest()
 
         account = get_account(username)
 
@@ -67,6 +70,6 @@ def post_register():
             flash('Такой пользователь уже существует!', 'warning')
         else:
             profile = form.populate_profile()
-            add_new_account(username, password, profile)
+            add_new_account(username, passhash, profile)
             return redirect(url_for('login'))
     return render_template('register.html', form=form)

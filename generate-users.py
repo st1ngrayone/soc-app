@@ -1,6 +1,6 @@
-import mysql.connector
+import mysql.connector, hashlib
 from faker import Faker
-from config import ConfigFake
+
 
 fake = Faker()
 mydb = mysql.connector.connect(
@@ -15,6 +15,7 @@ mycursor = mydb.cursor()
 for _ in range(1000):
     username = fake.user_name()
     password = fake.password()
+    passhash = hashlib.md5(password.encode('utf8')).hexdigest()
     email = fake.email()
     name = fake.first_name()
     lastname = fake.last_name()
@@ -24,7 +25,7 @@ for _ in range(1000):
         'INSERT INTO accounts VALUES (NULL, %s, %s, %s, %s, %s, NULL, %s, NULL, %s, NULL)',
         (
             username,
-            password,
+            passhash,
             email,
             name,
             lastname,

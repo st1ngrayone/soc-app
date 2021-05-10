@@ -1,0 +1,42 @@
+{% extends 'base_nav.html' %}
+
+{% block page_name %}Поиск | {% endblock %}
+
+{% block container %}
+<div class="row">
+  <div class="col-8 col-lg-4 offset-2 offset-lg-4">
+    <div class="text-center mt-3 w-auto">
+      <h1 class="h3 mb-3 font-weight-normal">Найдено</h1>
+
+      <div class="table-responsive">
+        <table class="table">
+          <thead>
+            <tr>
+                <th>Имя</th>
+                <th>Фамилия</th>
+            <tr>
+          </thead>
+          <tbody>
+            {% for user in results %}
+            <tr>
+              <td>{{ user.name }}</td>
+              <td>{{ user.lastname }}</td>
+
+              {% if user.status == '0' %}
+                <td>
+                    <form action="{{ url_for('confirm_friend_request') }}" method="post">
+                      <input id="userId" name="userId" type="hidden" value="{{ user.id }}">
+                      <input class="btn btn-secondary btn-sm" type="submit" value="принять заявку" />
+                    </form>
+                </td>
+              {% endif %}
+
+            </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}

@@ -4,7 +4,7 @@ from werkzeug.utils import redirect
 
 from application import app
 from application.dao import get_accounts, get_friends, get_account, update_account, add_friend, confirm_friend
-from application.forms import ProfileForm
+from application.forms import ProfileForm, SearchForm
 
 
 @app.route('/profile/')
@@ -63,6 +63,17 @@ def confirm_friend_request():
         confirm_friend(current_user.user_id, user_id)
     return redirect(url_for('friends'))
 
+@app.route('/search')
+def search():
+    title = 'Поиск'
+    return render_template('search.html', title=title)
+
+@app.route('/results', methods=['POST'])
+def results():
+    title = 'Поиск'
+    name = request.form.get("name")
+    lastname = request.form.get("lastname")
+    return render_template('results.html',name=name, lastname=lastname)
 
 @app.route('/')
 @app.route('/index')

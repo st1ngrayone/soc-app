@@ -85,3 +85,13 @@ def get_friends(user_id):
 
     cursor.execute(query, (user_id,))
     return cursor.fetchall()
+
+def search(name, lastname):
+    cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
+    query = 'SELECT  a.name, a.lastname from accounts a' \
+            'where a.name like %s and a.lastname like %s ' \
+            'order by id ' \
+            'limit 10'
+
+    cursor.execute(query, ((name + '%'), (lastname + '%') ))
+    return cursor.fetchall()

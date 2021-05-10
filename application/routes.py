@@ -63,18 +63,23 @@ def confirm_friend_request():
         confirm_friend(current_user.user_id, user_id)
     return redirect(url_for('friends'))
 
+
 @app.route('/search')
 def search():
-    title = 'Поиск'
-    return render_template('search.html', title=title)
+    results_data = []
+    name = request.args.get('name')
+    lastname = request.args.get('lastname')
 
-@app.route('/results', methods=['POST'])
-def results():
-    title = 'Поиск'
-    name = request.form.get("name")
-    lastname = request.form.get("lastname")
-    results_data =  search_users(name, lastname)
-    return render_template('results.html', title=title, results=results_data )
+    if name or lastname:
+        results_data = search_users(name, lastname)
+
+    return render_template(
+        'search.html',
+        results=results_data,
+        name=name,
+        lastname=lastname
+    )
+
 
 @app.route('/')
 @app.route('/index')

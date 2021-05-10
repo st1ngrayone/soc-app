@@ -1,21 +1,61 @@
 {% extends 'base_nav.html' %}
 
-{% block page_name %} {{title}} | {% endblock %}
+{% block page_name %} Поиск | {% endblock %}
 
 {% block container %}
-        <div class="row">
-          <div class="col-8 col-lg-4 offset-2 offset-lg-4">
-            <div class="text-center mt-3 w-auto">
-              <h1 class="h3 mb-3 font-weight-normal">Поиск пользователей</h1>
-                </br>
-                <form class="form-inline sm-form mr-auto mb-4" action="/results" method="post">
-                        <input class="form-control mr-sm-2" type="text" name="name"
-                               placeholder="Имя" value="{{ query }}" aria-label="Search">
-                        <input class="form-control mr-sm-2" type="text" name="lastname"
-                               placeholder="Фамилия" value="{{ query }}" aria-label="Search">
-                        <button class="btn btn-primary mt-4 my-0" type="submit">Найти</button>
-                </form>
-            </div>
+  <div class="row">
+    <div class="col-8 col-lg-4 offset-2 offset-lg-4">
+      <div class="text-center mt-3 w-auto">
+        <h1 class="h3 mb-3 font-weight-normal">Поиск пользователей</h1>
+          </br>
+            <form class="form-inline sm-form mr-auto mb-4" action="/search" method="get">
+              <div class="form-group">
+                <input class="form-control mr-sm-2" type="text" name="name"
+                       placeholder="Имя" value="{% if name %} {{ name }} {% endif %}" aria-label="Search">
+                <input class="form-control mr-sm-2" type="text" name="lastname"
+                       placeholder="Фамилия" value="{% if lastname %} {{ lastname }} {% endif %}" aria-label="Search">
+                <button class="btn btn-primary" type="submit">Найти</button>
+              </div>
+            </form>
+      </div>
+
+    {% if name or lastname %}
+
+      <div class="text-center mt-5">
+        <h5 class="h5 mb-4 font-weight-normal text-nowrap">
+            Найдено {{ results|length }} по запросу «<strong>{{ name }} {{ lastname }}</strong>»
+        </h5>
+
+        <div class="table-responsive" style="overflow-x:hidden;">
+          <table class="table">
+            <thead>
+              <tr>
+                <th>Имя</th>
+                <th>Фамилия</th>
+                <th>Город</th>
+              <tr>
+            </thead>
+              <tbody>
+                {% for user in results %}
+                  <tr>
+                    <td>{{ user.name }}</td>
+                    <td>{{ user.lastname }}</td>
+                    <td>{{ user.city }}</td>
+                    <td>
+                      <form action="{{ url_for('add_friend_request') }}" method="post">
+                        <input id="userId" name="userId" type="hidden" value="{{ user.id }}">
+                        <input class="btn btn-secondary btn-sm" type="submit" value="добавить" />
+                      </form>
+                    </td>
+                  </tr>
+                {% endfor %}
+              </tbody>
+            </table>
           </div>
         </div>
+
+    {% endif %}
+
+    </div>
+  </div>
 {% endblock %}

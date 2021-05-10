@@ -22,13 +22,13 @@
 
         <li class="nav-item {% if request.endpoint == 'users' %} active {% endif %}">
           <a href="{{ url_for('users') }}" class="nav-link ml-3 custom-link">
-            <i class="fa fa-users">Users</i>
+            <i class="fa fa-users"> Users</i>
           </a>
         </li>
 
         <li class="nav-item {% if request.endpoint == 'users' %} active {% endif %}">
           <a href="{{ url_for('search') }}" class="nav-link ml-3 custom-link">
-            <i class="fa fa-search">Search</i>
+            <i class="fa fa-search"> Search</i>
           </a>
         </li>
 
@@ -41,13 +41,13 @@
 
             <li class="nav-item {% if request.endpoint == 'profile' %} active {% endif %}">
               <a href="{{ url_for('profile') }}" class="nav-link ml-3 custom-link">
-                <i class="fa fa-user">Profile</i>
+                <i class="fa fa-user"> Profile</i>
               </a>
             </li>
 
             <li class="nav-item">
               <a href="{{ url_for('logout') }}" class="nav-link ml-3 custom-link">
-                <i class="fa fa-sign-out">Exit</i>
+                <i class="fa fa-sign-out"> Exit</i>
               </a>
             </li>
         {% endif %}

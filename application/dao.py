@@ -86,6 +86,7 @@ def get_friends(user_id):
     cursor.execute(query, (user_id,))
     return cursor.fetchall()
 
+
 def search_users(name, lastname):
     cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
     query = 'SELECT name, lastname from accounts ' \
@@ -93,5 +94,5 @@ def search_users(name, lastname):
             'order by id ' \
             'limit 1000 '
 
-    cursor.execute(query, ((name + '%'), (lastname + '%') ))
+    cursor.execute(query, ((name + '%'), (lastname + '%')))
     return cursor.fetchall()

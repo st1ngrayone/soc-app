@@ -91,7 +91,7 @@ def search_users(name, lastname):
     query = 'SELECT name, lastname from accounts ' \
             'where name like % s and lastname like % s ' \
             'order by id ' \
-            'limit 10 '
+            'limit 1000 '
 
     cursor.execute(query, ((name + '%'), (lastname + '%') ))
     return cursor.fetchall()

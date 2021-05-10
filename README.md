@@ -1,13 +1,10 @@
-# SOC-APP High load otus
+# SOC-APP High load OTUS
 
-## Exec SQL statements
-
+#### Exec SQL statements
 `mysql -e db/mysql.schema`
 
-## Build
-
+#### Build
 `docker build -t soc-app .`
 
-## Run
-
+#### Run
 `docker-compose up -d`

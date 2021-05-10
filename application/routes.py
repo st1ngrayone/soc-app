@@ -3,8 +3,8 @@ from flask_login import login_required, current_user
 from werkzeug.utils import redirect
 
 from application import app
-from application.dao import get_accounts, get_friends, get_account, update_account, add_friend, confirm_friend
-from application.forms import ProfileForm, SearchForm
+from application.dao import get_accounts, get_friends, get_account, update_account, add_friend, confirm_friend, search_users
+from application.forms import ProfileForm
 
 
 @app.route('/profile/')
@@ -73,7 +73,8 @@ def results():
     title = 'Поиск'
     name = request.form.get("name")
     lastname = request.form.get("lastname")
-    return render_template('results.html',name=name, lastname=lastname)
+    results_data =  search_users(name, lastname)
+    return render_template('results.html', title=title, results=results_data )
 
 @app.route('/')
 @app.route('/index')

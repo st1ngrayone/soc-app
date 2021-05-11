@@ -45,7 +45,7 @@ def get_accounts(user_id):
     cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
     cursor.execute(
         'SELECT a.id, a.name, a.lastname, a.city FROM accounts a '
-        'WHERE a.name is not NULL and a.id != %s and a.id not in (select distinct friend_two from friends where friend_one = %s) '
+        'WHERE a.name is not NULL and a.id != %s and a.id not in (select distinct friend_two from friends where friend_one = %s) limit 50 '
         , (user_id, user_id)
     )
     return cursor.fetchall()
@@ -89,7 +89,7 @@ def get_friends(user_id):
 
 def search_users(name, lastname):
     cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
-    query = 'SELECT name, lastname from accounts ' \
+    query = 'SELECT name, lastname, city from accounts ' \
             'where name like % s and lastname like % s ' \
             'order by id ' \
             'limit 1000 '

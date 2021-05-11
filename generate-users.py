@@ -12,7 +12,7 @@ mydb = mysql.connector.connect(
 
 mycursor = mydb.cursor()
 
-for _ in range(1000):
+for _ in range(1000000):
     username = fake.user_name()
     password = fake.password()
     passhash = hashlib.md5(password.encode('utf8')).hexdigest()

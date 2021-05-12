@@ -26,13 +26,14 @@
             Найдено {{ results|length }} по запросу «<strong>{{ name }} {{ lastname }}</strong>»
         </h5>
 
-        <div class="table-responsive" style="overflow-x:hidden;">
+        <div class="table-responsive-lg" style="overflow-x:hidden;">
           <table class="table">
             <thead>
               <tr>
                 <th>Имя</th>
                 <th>Фамилия</th>
                 <th>Город</th>
+                <th>Добавить</th>
               <tr>
             </thead>
               <tbody>
@@ -44,7 +45,7 @@
                     <td>
                       <form action="{{ url_for('add_friend_request') }}" method="post">
                         <input id="userId" name="userId" type="hidden" value="{{ user.id }}">
-                        <input class="btn btn-secondary btn-sm" type="submit" value="добавить" />
+                        <input class="btn btn-secondary btn-sm" type="submit" value="профиль" />
                       </form>
                     </td>
                   </tr>

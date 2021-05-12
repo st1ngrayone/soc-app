@@ -1,7 +1,8 @@
+import hashlib
+
 from flask import render_template, request, redirect, url_for, flash
 from flask_login import logout_user, login_user, current_user
 
-import hashlib
 from application import app
 from application.entity.user import User
 from application.extensions import login_manager
@@ -68,6 +69,7 @@ def post_register():
 
         if account:
             flash('Такой пользователь уже существует!', 'warning')
+            form.username.errors.append('Такой пользователь уже существует!')
         else:
             profile = form.populate_profile()
             add_new_account(username, passhash, profile)

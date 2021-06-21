@@ -1,6 +1,5 @@
 import MySQLdb.cursors
 
-
 from application.extensions import mysql
 
 
@@ -45,7 +44,8 @@ def get_accounts(user_id):
     cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
     cursor.execute(
         'SELECT a.id, a.name, a.lastname, a.city FROM accounts a '
-        'WHERE a.name is not NULL and a.id != %s and a.id not in (select distinct friend_two from friends where friend_one = %s) '
+        'WHERE a.name is not NULL and a.id != %s and a.id not in '
+        '(select distinct friend_two from friends where friend_one = %s) '
         , (user_id, user_id)
     )
     return cursor.fetchall()
@@ -95,4 +95,69 @@ def search_users(name, lastname):
             'limit 1000 '
 
     cursor.execute(query, ((name + '%'), (lastname + '%')))
+    return cursor.fetchall()
+
+
+def add_new_post(user_id, body, created_at):
+    cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
+    cursor.execute(
+        'INSERT INTO posts VALUES (NULL, %s, %s, %s, NULL)',
+        (
+            user_id,
+            body,
+            created_at
+        )
+    )
+    mysql.connection.commit()
+
+
+def get_posts():
+    cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
+    cursor.execute(
+        'SELECT p.*, ac.name, ac.lastname FROM posts p '
+        'JOIN accounts ac on ac.id = p.account_id_fk '
+        'ORDER BY p.created_at DESC limit 30 '
+    )
+    return cursor.fetchall()
+
+
+def get_posts_by_follower(user_id):
+    cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
+    cursor.execute(
+        'SELECT p.id, p.account_id_fk, p.body, f.target_id, ac.name, ac.lastname ' 
+        'FROM posts p '
+        'JOIN accounts ac on ac.id = p.account_id_fk '
+        'LEFT JOIN followers f on f.target_id = p.account_id_fk '
+        'WHERE f.source_id = %s', (user_id,)
+    )
+    return cursor.fetchall()
+
+
+def add_new_follower(user_id, other_user_id, _type, created_at):
+    cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
+    cursor.execute(
+        'INSERT INTO followers VALUES (NULL, %s, %s, %s, %s, NULL)',
+        (
+            user_id,
+            other_user_id,
+            _type,
+            created_at
+        )
+    )
+    mysql.connection.commit()
+
+
+def get_followers(user_id):
+    cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
+    cursor.execute(
+        'SELECT * FROM followers WHERE target_id = %s', (user_id,)
+    )
+    return cursor.fetchall()
+
+
+def get_followings(user_id):
+    cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
+    cursor.execute(
+        'SELECT * FROM followers WHERE source_id = %s', (user_id,)
+    )
     return cursor.fetchall()

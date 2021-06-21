@@ -11,12 +11,6 @@ class LoginForm(FlaskForm):
     submit = SubmitField('submit')
 
 
-class SearchForm(FlaskForm):
-    name = StringField(validators=[InputRequired()])
-    lastname = StringField(validators=[InputRequired()])
-    submit = SubmitField('submit')
-
-
 class RegisterForm(FlaskForm):
     username = StringField(validators=[
         InputRequired(), Regexp('^\\w+$', message="Логин должен содержать только буквы и цифры!")

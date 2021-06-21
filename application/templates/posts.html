@@ -1,0 +1,41 @@
+{% extends 'base_nav.html' %}
+
+{% block page_name %}Публикации | {% endblock %}
+
+{% block container %}
+<div class="row">
+  <div class="col-8 offset-2 offset-lg-4">
+    <div class="text-center mt-3">
+      <h1 class="h3 mb-4 w-100 font-weight-normal">Публикации</h1>
+
+      <div class="table-responsive">
+        <table class="table w-300 d-block d-md-table">
+          <thead>
+            <tr>
+              <th>Автор</th>
+              <th>Текст</th>
+              <th>Дата</th>
+            <tr>
+          </thead>
+            <tbody>
+              {% for post in posts %}
+                <tr>
+                  <td>{{ post.name }} {{ post.lastname }}</td>
+                  <td>{{ post.body }}</td>
+                  <td>{{ post.created_at }}</td>
+                  <td>
+                    <form action="{{ url_for('add_follower') }}" method="post">
+                      <input id="followerId" name="followerId" type="hidden" value="{{ post.account_id_fk }}">
+                      <input id="type" name="type" type="hidden" value="0">
+                      <button class="btn btn-secondary btn-sm" type="submit"><i class="fa fa-thumbs-up"></i></button>
+                    </form>
+                </td>
+                </tr>
+              {% endfor %}
+            </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}

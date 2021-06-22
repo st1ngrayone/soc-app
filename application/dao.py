@@ -98,12 +98,13 @@ def search_users(name, lastname):
     return cursor.fetchall()
 
 
-def add_new_post(user_id, body, created_at):
+def add_new_post(user_id, title, body, created_at):
     cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
     cursor.execute(
-        'INSERT INTO posts VALUES (NULL, %s, %s, %s, NULL)',
+        'INSERT INTO posts VALUES (NULL, %s, %s, %s, %s, NULL)',
         (
             user_id,
+            title,
             body,
             created_at
         )
@@ -136,7 +137,8 @@ def get_posts_by_follower(user_id):
 def add_new_follower(user_id, other_user_id, _type, created_at):
     cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
     cursor.execute(
-        'INSERT INTO followers VALUES (NULL, %s, %s, %s, %s, NULL)',
+        'INSERT INTO followers VALUES (NULL, %s, %s, %s, %s, NULL) '
+        'ON DUPLICATE KEY UPDATE type=VALUES(type)',
         (
             user_id,
             other_user_id,

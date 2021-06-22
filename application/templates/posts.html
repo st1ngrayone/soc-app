@@ -4,38 +4,57 @@
 
 {% block container %}
 <div class="row">
-  <div class="col-8 offset-2 offset-lg-4">
-    <div class="text-center mt-3">
-      <h1 class="h3 mb-4 w-100 font-weight-normal">Публикации</h1>
+    <div class="col-8 offset-2 offset-lg-4">
+        <div class="text-center mt-3">
+            <h1 class="h3 mb-4 w-100 font-weight-normal">Публикации</h1>
 
-      <div class="table-responsive">
-        <table class="table w-300 d-block d-md-table">
-          <thead>
-            <tr>
-              <th>Автор</th>
-              <th>Текст</th>
-              <th>Дата</th>
-            <tr>
-          </thead>
-            <tbody>
-              {% for post in posts %}
-                <tr>
-                  <td>{{ post.name }} {{ post.lastname }}</td>
-                  <td>{{ post.body }}</td>
-                  <td>{{ post.created_at }}</td>
-                  <td>
-                    <form action="{{ url_for('add_follower') }}" method="post">
-                      <input id="followerId" name="followerId" type="hidden" value="{{ post.account_id_fk }}">
-                      <input id="type" name="type" type="hidden" value="0">
-                      <button class="btn btn-secondary btn-sm" type="submit"><i class="fa fa-thumbs-up"></i></button>
-                    </form>
-                </td>
-                </tr>
-              {% endfor %}
-            </tbody>
-        </table>
-      </div>
+            <div class="table-responsive">
+                <table class="table w-300 d-block d-md-table">
+                    <thead>
+                    <tr>
+                        <th>Автор</th>
+                        <th>Текст</th>
+                        <th>Дата</th>
+                    <tr>
+                    </thead>
+                    <tbody>
+                    {% for post in posts %}
+                    <tr>
+                        <td>{{ post.name }} {{ post.lastname }}</td>
+                        <td>{{ post.body }}</td>
+                        <td>{{ post.created_at.strftime("%d-%m-%Y %H:%M") }}</td>
+                        <td>
+                            <i class="fa fa-thumbs-up" id="like-elem" title="like!"
+                               onclick="sendFollower({{ post.account_id_fk }}, '0')"></i>
+
+                            <i class="fa fa-thumbs-down" id="unlike-elem" title="dislike"
+                               onclick="sendFollower({{ post.account_id_fk }}, '1')"></i>
+
+                            <i class="fa fa-eye" id="follow-elem" title="follow"
+                               onclick="sendFollower({{ post.account_id_fk }}, '2')"></i>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+      <h4 class="sm-form mr-auto mt-5" >Добавить пост</h4>
+      <form action="{{ url_for('new_post') }}" method="post" class="sm-form mr-auto mt-3 mb-4" >
+        {{ form.csrf_token }}
+
+        <div class="form-group">
+          {{ form.title(type='text', class='form-control', placeholder="Заголовок") }}
+        </div>
+
+        <div class="form-group">
+          {{ form.body(type='text', class='form-control', placeholder="Текст", rows="3") }}
+        </div>
+
+        {{ form.submit(value='Добавить', class='btn btn-info') }}
+      </form>
+
     </div>
-  </div>
 </div>
 {% endblock %}

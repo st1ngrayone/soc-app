@@ -5,9 +5,9 @@ $(document).ready(function() {
 });
 
 
-function sendFollower(followerId, type)  {
+function sendFollower(followerId, post_id, type)  {
   let data = {
-    type: type, followerId: followerId
+    type: type, post_id: post_id, followerId: followerId
   };
 
   fetch("/follow", {
@@ -15,5 +15,6 @@ function sendFollower(followerId, type)  {
     body: JSON.stringify(data)
   }).then(res => {
     console.log("Request complete! response:", res);
+    window.location.reload();
   });
 }

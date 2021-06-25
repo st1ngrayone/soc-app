@@ -115,10 +115,13 @@ def add_new_post(user_id, title, body, created_at):
 def get_posts():
     cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
     cursor.execute(
-        'SELECT p.*, ac.name, ac.lastname, COUNT(ff.source_id) as likes '
+        'SELECT p.*, ac.name, ac.lastname,  '
+        'SUM(CASE WHEN ff.type = "0" THEN 1 ELSE 0 END) as likes, '
+        'SUM(CASE WHEN ff.type = "1" THEN 1 ELSE 0 END) as dislikes, '
+        'SUM(CASE WHEN ff.type = "2" THEN 1 ELSE 0 END) as followers_count '
         'FROM posts p '
         'JOIN accounts ac on ac.id = p.account_id_fk '
-        'LEFT JOIN followers ff on ff.source_id = p.account_id_fk '
+        'LEFT JOIN followers ff on ff.post_id = p.id '
         'GROUP BY ff.source_id, p.id, p.account_id_fk, p.title, p.body, p.created_at '
         'ORDER BY p.created_at DESC limit 30'
     )
@@ -128,23 +131,29 @@ def get_posts():
 def get_posts_by_follower(user_id):
     cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
     cursor.execute(
-        'SELECT p.*, ac.name, ac.lastname ' 
+        'SELECT p.*, ac.name, ac.lastname,  '
+        'SUM(CASE WHEN ff.type = "0" THEN 1 ELSE 0 END) as likes, '
+        'SUM(CASE WHEN ff.type = "1" THEN 1 ELSE 0 END) as dislikes, '
+        'SUM(CASE WHEN ff.type = "2" THEN 1 ELSE 0 END) as followers_count '
         'FROM posts p '
         'JOIN accounts ac on ac.id = p.account_id_fk '
-        'LEFT JOIN followers f on f.target_id = p.account_id_fk '
-        'WHERE f.source_id = %s', (user_id,)
+        'LEFT JOIN followers ff on ff.post_id = p.id '
+        'WHERE ff.source_id = %s and ff.type in ("0", "2")'
+        'GROUP BY ff.source_id, p.id, p.account_id_fk, p.title, p.body, p.created_at '
+        'ORDER BY p.created_at DESC limit 30', (user_id,)
     )
     return cursor.fetchall()
 
 
-def add_new_follower(user_id, other_user_id, _type, created_at):
+def add_new_follower(user_id, other_user_id, post_id, _type, created_at):
     cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
     cursor.execute(
-        'INSERT INTO followers VALUES (NULL, %s, %s, %s, %s, NULL) '
+        'INSERT INTO followers VALUES (NULL, %s, %s, %s, %s, %s, NULL) '
         'ON DUPLICATE KEY UPDATE type=VALUES(type)',
         (
             user_id,
             other_user_id,
+            post_id,
             _type,
             created_at
         )

@@ -39,7 +39,6 @@ def new_post():
         title = form.title.data
         body = form.body.data
         add_new_post(user_id(), title, body, dt.now())
-        flash('Новый пост добавлен!', 'success')
         return redirect(url_for('all_posts'))
     else:
         flash('Произошла ошибка!', 'warning')
@@ -60,6 +59,11 @@ def add_follower():
 
     if 'followerId' in data:
         follower_id = data['followerId']
+        post_id = data['post_id']
         like_type = data['type']
-        add_new_follower(user_id(), follower_id, like_type, dt.now())
+
+        add_new_follower(
+            user_id(), follower_id, post_id, like_type, dt.now()
+        )
+
         return jsonify(data)

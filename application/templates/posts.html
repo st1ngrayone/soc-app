@@ -25,13 +25,13 @@
                         <td>{{ post.created_at.strftime("%d-%m-%Y %H:%M") }}</td>
                         <td>
                             <i class="fa fa-thumbs-up" id="like-elem" title="like!"
-                               onclick="sendFollower({{ post.account_id_fk }}, '0')"></i>
+                               onclick="sendFollower({{ post.account_id_fk }}, '0')">{{ post.likes }} </i>
 
                             <i class="fa fa-thumbs-down" id="unlike-elem" title="dislike"
-                               onclick="sendFollower({{ post.account_id_fk }}, '1')"></i>
+                               onclick="sendFollower({{ post.account_id_fk }}, '1')">{{ post.likes }} </i>
 
                             <i class="fa fa-eye" id="follow-elem" title="follow"
-                               onclick="sendFollower({{ post.account_id_fk }}, '2')"></i>
+                               onclick="sendFollower({{ post.account_id_fk }}, '2')">{{ post.likes }} </i>
                         </td>
                     </tr>
                     {% endfor %}

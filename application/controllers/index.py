@@ -27,4 +27,4 @@ def search():
 @app.route('/index')
 @login_required
 def index():
-    return redirect(url_for('posts'))
+    return redirect(url_for('all_posts'))

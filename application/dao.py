@@ -115,9 +115,12 @@ def add_new_post(user_id, title, body, created_at):
 def get_posts():
     cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
     cursor.execute(
-        'SELECT p.*, ac.name, ac.lastname FROM posts p '
+        'SELECT p.*, ac.name, ac.lastname, COUNT(ff.source_id) as likes '
+        'FROM posts p '
         'JOIN accounts ac on ac.id = p.account_id_fk '
-        'ORDER BY p.created_at DESC limit 30 '
+        'LEFT JOIN followers ff on ff.source_id = p.account_id_fk '
+        'GROUP BY ff.source_id, p.id, p.account_id_fk, p.title, p.body, p.created_at '
+        'ORDER BY p.created_at DESC limit 30'
     )
     return cursor.fetchall()
 
@@ -125,7 +128,7 @@ def get_posts():
 def get_posts_by_follower(user_id):
     cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
     cursor.execute(
-        'SELECT p.id, p.account_id_fk, p.body, f.target_id, ac.name, ac.lastname ' 
+        'SELECT p.*, ac.name, ac.lastname ' 
         'FROM posts p '
         'JOIN accounts ac on ac.id = p.account_id_fk '
         'LEFT JOIN followers f on f.target_id = p.account_id_fk '

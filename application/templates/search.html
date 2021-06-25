@@ -7,16 +7,16 @@
     <div class="offset-2 offset-lg-4">
       <div class="text-center mt-3 w-auto">
         <h1 class="h3 mb-3 font-weight-normal">Поиск пользователей</h1>
-          </br>
-            <form class="form-inline sm-form mr-auto mb-4" action="/search" method="get">
-              <div class="form-group">
-                <input class="form-control mr-sm-2" type="text" name="name"
-                       placeholder="Имя" value="{% if name %}{{ name }}{% endif %}" aria-label="Search">
-                <input class="form-control mr-sm-2" type="text" name="lastname"
-                       placeholder="Фамилия" value="{% if lastname %}{{ lastname }}{% endif %}" aria-label="Search">
-                <button class="btn btn-secondary" type="submit">Найти</button>
-              </div>
-            </form>
+        </br>
+        <form class="form-inline sm-form mr-auto mb-4" action="/search" method="get">
+          <div class="form-group">
+            <input class="form-control mr-sm-2" type="text" name="name"
+                   placeholder="Имя" value="{% if name %}{{ name }}{% endif %}" aria-label="Search">
+            <input class="form-control mr-sm-2" type="text" name="lastname"
+                   placeholder="Фамилия" value="{% if lastname %}{{ lastname }}{% endif %}" aria-label="Search">
+            <button class="btn btn-secondary" type="submit">Найти</button>
+          </div>
+        </form>
       </div>
 
     {% if name or lastname %}

@@ -1,6 +1,6 @@
 from flask_wtf import FlaskForm
-from wtforms import StringField, SubmitField, DateField, SelectField
-from wtforms.validators import InputRequired, Email, EqualTo, Regexp, NumberRange
+from wtforms import StringField, SubmitField, DateField, SelectField, TextAreaField
+from wtforms.validators import InputRequired, Email, EqualTo, Regexp
 
 from application.entity.profile import Profile
 
@@ -8,12 +8,6 @@ from application.entity.profile import Profile
 class LoginForm(FlaskForm):
     username = StringField(validators=[InputRequired()])
     password = StringField(validators=[InputRequired()])
-    submit = SubmitField('submit')
-
-
-class SearchForm(FlaskForm):
-    name = StringField(validators=[InputRequired()])
-    lastname = StringField(validators=[InputRequired()])
     submit = SubmitField('submit')
 
 
@@ -53,3 +47,9 @@ class ProfileForm(FlaskForm):
             self.birth_date.data, self.email.data, self.gender.data,
             self.name.data, self.lastname.data, self.city.data
         )
+
+
+class PostForm(FlaskForm):
+    title = StringField(validators=[InputRequired()])
+    body = TextAreaField(validators=[InputRequired()])
+    submit = SubmitField('submit')

@@ -1,10 +1,11 @@
-from flask import render_template, url_for, flash, request
-from flask_login import login_required, current_user
 from werkzeug.utils import redirect
+from flask_login import login_required, current_user
+from flask import render_template, url_for, flash, request
 
 from application import app
-from application.dao import get_accounts, get_friends, get_account, update_account, add_friend, confirm_friend, search_users
 from application.forms import ProfileForm
+from application.dao import get_accounts, get_friends, get_account
+from application.dao import update_account, add_friend, confirm_friend
 
 
 @app.route('/profile/')
@@ -62,27 +63,3 @@ def confirm_friend_request():
         user_id = request.form['userId']
         confirm_friend(current_user.user_id, user_id)
     return redirect(url_for('friends'))
-
-
-@app.route('/search')
-def search():
-    results_data = []
-    name = request.args.get('name')
-    lastname = request.args.get('lastname')
-
-    if name or lastname:
-        results_data = search_users(name, lastname)
-
-    return render_template(
-        'search.html',
-        results=results_data,
-        name=name,
-        lastname=lastname
-    )
-
-
-@app.route('/')
-@app.route('/index')
-@login_required
-def index():
-    return render_template('index.html')

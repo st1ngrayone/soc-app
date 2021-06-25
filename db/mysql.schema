@@ -15,18 +15,44 @@ CREATE TABLE `accounts` (
 ) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 CREATE TABLE `updates` (
-`update_id` INT(11) AUTO_INCREMENT ,
-`update` VARCHAR(45),
-`friend_id_fk` int(11),
-`created` INT(11) ,
-`ip` VARCHAR(45),
-PRIMARY KEY (`update_id`),
-FOREIGN KEY (`friend_id_fk`) REFERENCES accounts(`id`)) ENGINE InnoDB AUTO_INCREMENT=4;
+  `update_id` INT(11) AUTO_INCREMENT,
+  `update` VARCHAR(45),
+  `friend_id_fk` int(11),
+  `created` INT(11) ,
+  `ip` VARCHAR(45),
+  PRIMARY KEY (`update_id`),
+  FOREIGN KEY (`friend_id_fk`) REFERENCES accounts(`id`)
+) ENGINE InnoDB AUTO_INCREMENT=4;
 
 CREATE TABLE `friends` (
-    `friend_one` INT(11) ,
-    `friend_two` INT(11) ,
-    `status` ENUM('0','1','2') DEFAULT '0',
-PRIMARY KEY (`friend_one`,`friend_two`),
-FOREIGN KEY (friend_one) REFERENCES accounts(`id`),
-FOREIGN KEY (friend_two) REFERENCES accounts(`id`));
+  `friend_one` INT(11),
+  `friend_two` INT(11),
+  `status` ENUM('0','1','2') DEFAULT '0',
+  PRIMARY KEY (`friend_one`,`friend_two`),
+  FOREIGN KEY (friend_one) REFERENCES accounts(`id`),
+  FOREIGN KEY (friend_two) REFERENCES accounts(`id`)
+);
+
+CREATE TABLE `posts` (
+  `id` BIGINT NOT NULL AUTO_INCREMENT,
+  `account_id_fk` int(11),
+  `title` TINYTEXT NOT NULL DEFAULT NULL,
+  `body` TINYTEXT NOT NULL DEFAULT NULL,
+  `created_at` DATETIME NOT NULL,
+  `updated_at` DATETIME NULL DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  FOREIGN KEY (`account_id_fk`) REFERENCES accounts(`id`)
+) ENGINE InnoDB;
+
+CREATE TABLE `followers` (
+  `id` BIGINT NOT NULL AUTO_INCREMENT,
+  `source_id` int(11) NOT NULL,
+  `target_id` int(11) NOT NULL,
+  `type` ENUM('0','1','2') DEFAULT '0',
+  `created_at` DATETIME NOT NULL,
+  `updated_at` DATETIME NULL DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `source_target_id` (`source_id`,`target_id`),
+  FOREIGN KEY (`source_id`) REFERENCES accounts(`id`),
+  FOREIGN KEY (`target_id`) REFERENCES accounts(`id`)
+) ENGINE InnoDB;

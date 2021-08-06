@@ -1,5 +1,6 @@
 import MySQLdb.cursors
 
+from application.entity.post import Post
 from application.extensions import mysql
 
 
@@ -98,21 +99,24 @@ def search_users(name, lastname):
     return cursor.fetchall()
 
 
-def add_new_post(user_id, title, body, created_at):
+def add_new_post(post: Post):
     cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
     cursor.execute(
         'INSERT INTO posts VALUES (NULL, %s, %s, %s, %s, NULL)',
         (
-            user_id,
-            title,
-            body,
-            created_at
+            post.user_id,
+            post.title,
+            post.body,
+            post.created_at
         )
     )
     mysql.connection.commit()
 
+    post.id = cursor.lastrowid
+    return post
 
-def get_posts():
+
+def get_posts(limit):
     cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
     cursor.execute(
         'SELECT p.*, ac.name, ac.lastname,  '
@@ -123,7 +127,47 @@ def get_posts():
         'JOIN accounts ac on ac.id = p.account_id_fk '
         'LEFT JOIN followers ff on ff.post_id = p.id '
         'GROUP BY ff.source_id, p.id, p.account_id_fk, p.title, p.body, p.created_at '
-        'ORDER BY p.created_at DESC limit 30'
+        'ORDER BY p.created_at DESC limit %s', (limit,)
+    )
+    return cursor.fetchall()
+
+
+def get_post_by_id(post_id):
+    cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
+    cursor.execute(
+        'SELECT p.*, ac.name, ac.lastname,  '
+        'SUM(CASE WHEN ff.type = "0" THEN 1 ELSE 0 END) as likes, '
+        'SUM(CASE WHEN ff.type = "1" THEN 1 ELSE 0 END) as dislikes, '
+        'SUM(CASE WHEN ff.type = "2" THEN 1 ELSE 0 END) as followers_count '
+        'FROM posts p '
+        'JOIN accounts ac on ac.id = p.account_id_fk '
+        'LEFT JOIN followers ff on ff.post_id = p.id '
+        'WHERE p.id = %s '
+        'GROUP BY ff.source_id, p.id, p.account_id_fk, p.title, p.body, p.created_at ', (post_id,)
+    )
+
+    post_db = cursor.fetchone()
+
+    post_db.pop('updated_at')
+
+    return Post(
+            user_id=post_db.get('account_id_fk'), **post_db
+        )
+
+
+def get_posts_over_id(limit, post_id):
+    cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
+    cursor.execute(
+        'SELECT p.*, ac.name, ac.lastname, '
+        'SUM(CASE WHEN ff.type = "0" THEN 1 ELSE 0 END) as likes, '
+        'SUM(CASE WHEN ff.type = "1" THEN 1 ELSE 0 END) as dislikes, '
+        'SUM(CASE WHEN ff.type = "2" THEN 1 ELSE 0 END) as followers_count '
+        'FROM posts p '
+        'JOIN accounts ac on ac.id = p.account_id_fk '
+        'LEFT JOIN followers ff on ff.post_id = p.id '
+        'WHERE p.id > %s '
+        'GROUP BY ff.source_id, p.id, p.account_id_fk, p.title, p.body, p.created_at '
+        'ORDER BY p.created_at DESC limit %s', (post_id, limit)
     )
     return cursor.fetchall()
 

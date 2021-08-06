@@ -14,7 +14,11 @@ from application.dao import get_account, add_new_account
 def load_user(username):
     account = get_account(username)
     if account:
-        return User(account['id'], account['username'], account['password'])
+        return User(
+            account['id'], account['username'],
+            account['password'],  account['name'],
+            account['lastname']
+        )
     return None
 
 

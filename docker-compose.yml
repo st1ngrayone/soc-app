@@ -8,14 +8,14 @@ services:
 #      MYSQL_DATABASE: socapp
 #      MYSQL_USER: monty
 #      MYSQL_PASSWORD: debian1
-#     MYSQL_ROOT_PASSWORD: p@ssworb
-#   networks:
-#     - flask_net
-#  ports:
+#      MYSQL_ROOT_PASSWORD: p@ssworb
+#    networks:
+#      - flask_net
+#    ports:
 #      - '3306:3306'
 #    expose:
 #      - '3306'
-  
+
   soc-app:
     image: soc-app
     container_name: socapp
@@ -40,6 +40,15 @@ services:
       - '443'
       - '80'
 
+  redis:
+    image: "redis:alpine"
+    container_name: redis
+    networks:
+      - flask_net
+    ports:
+      - '6379:6379'
+    expose:
+      - '6379'
+
 networks:
   flask_net:
-  

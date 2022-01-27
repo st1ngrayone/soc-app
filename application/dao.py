@@ -1,8 +1,8 @@
-import MySQLdb.cursors
+import MySQLdb.cursors, json
 
 from application.entity.post import Post
 from application.extensions import mysql
-
+from config import Config
 
 def get_account(username):
     cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
@@ -51,6 +51,15 @@ def get_accounts(user_id):
     )
     return cursor.fetchall()
 
+def get_accounts_api(user_id):
+    cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
+    cursor.execute(
+        'SELECT a.id, a.name, a.lastname, a.city FROM accounts a '
+        'WHERE a.name is not NULL and a.id != %s and a.id not in '
+        '(select distinct friend_two from friends where friend_one = %s) limit 50 '
+        , (user_id, user_id)
+    )
+    return json.dumps(cursor.fetchall())
 
 def add_friend(user_id, other_user_id):
     cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
@@ -112,8 +121,20 @@ def add_new_post(post: Post):
     )
     mysql.connection.commit()
 
+
     post.id = cursor.lastrowid
     return post
+    # url = Config.RMQ_URL
+    # params = pika.URLParameters(url)
+    # connection = pika.BlockingConnection(params)
+    # channel = connection.channel()  # start a channel
+    # channel.queue_declare(queue='hello')  # Declare a queue
+    # channel.basic_publish(exchange='',
+    #                       routing_key='hello',
+    #                       body='Hello CloudAMQP!')
+    #
+    # print(" [x] Sent 'Hello World!'")
+    #connection.close()
 
 
 def get_posts(limit):

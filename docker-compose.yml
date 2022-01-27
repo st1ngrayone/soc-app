@@ -32,13 +32,11 @@ services:
     networks:
       - flask_net
     ports:
-      - '443:443'
-      - '80:80'
+      - '8080:80'
     depends_on:
       - 'soc-app'
     expose:
-      - '443'
-      - '80'
+      - '8080'
 
   redis:
     image: "redis:alpine"

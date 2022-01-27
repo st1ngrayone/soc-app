@@ -11,3 +11,4 @@ Flask-WTF==0.14.3
 email-validator==1.1.2
 Faker==8.1.0
 redis==3.5.3
+pika==1.1.0

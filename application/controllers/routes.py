@@ -1,10 +1,10 @@
 from werkzeug.utils import redirect
 from flask_login import login_required, current_user
-from flask import render_template, url_for, flash, request
+from flask import render_template, url_for, flash, request, Response
 
 from application import app
 from application.forms import ProfileForm
-from application.dao import get_accounts, get_friends, get_account
+from application.dao import get_accounts, get_friends, get_account, get_accounts_api
 from application.dao import update_account, add_friend, confirm_friend
 
 
@@ -39,6 +39,11 @@ def users():
     accounts = get_accounts(current_user.user_id)
     return render_template('users.html', users=accounts)
 
+@app.route('/api/users')
+@login_required
+def users_api():
+    accounts_json = get_accounts_api(current_user.user_id)
+    return Response(accounts_json, mimetype='text/html')
 
 @app.route('/friends')
 @login_required

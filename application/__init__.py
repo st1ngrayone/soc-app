@@ -2,6 +2,7 @@ from flask import Flask
 
 from config import Config
 from application.extensions import login_manager, mysql
+#from application.rmq import consume
 
 app = Flask(__name__)
 
